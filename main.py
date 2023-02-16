@@ -6,15 +6,20 @@ load_dotenv()
 
 BOT_KEY = os.getenv('BOT_KEY', default='')
 API_KEY = os.getenv('API_KEY', default='')
-API_URL = os.getenv('API_URL', default='https://api.openai.com/v1/completions')
-IA_MODEL = os.getenv('IA_MODEL', default='text-davinci-003')
+API_URL = 'https://api.openai.com/v1/completions'
+IA_MODEL = 'text-davinci-003'
+IA_CONTEXT = os.getenv('IA_CONTEXT', default='')
 
 bot = telebot.TeleBot(BOT_KEY)
 
 
 @bot.message_handler(func=lambda m: True)
 def responder(mensagem):
-    bot.send_message(mensagem.chat.id, ask_something(mensagem.text))
+    text = f"""
+    {IA_CONTEXT}
+    {mensagem.text}
+    """
+    bot.send_message(mensagem.chat.id, ask_something(text))
 
 
 def ask_something(question):
